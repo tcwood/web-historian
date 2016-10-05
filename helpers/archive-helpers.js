@@ -25,10 +25,19 @@ exports.initialize = function(pathsObj) {
 // The following function names are provided to you to suggest how you might
 // modularize your code. Keep it clean!
 
-exports.readListOfUrls = function() {
+exports.readListOfUrls = function(siteListString) {
+  //Split on new line characters
+  return siteListString.split('\n');
+  //Return array of sites
 };
 
-exports.isUrlInList = function() {
+exports.isUrlInList = function(siteListArray, target) {
+  //Check the index of the target in siteListArray
+    //If it is >= 0
+      //Return true
+    //Else
+      //Return false
+  return siteListArray.indexOf(target) >= 0; 
 };
 
 exports.addUrlToList = function() {
