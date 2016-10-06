@@ -2,6 +2,7 @@ var fs = require('fs');
 var path = require('path');
 var _ = require('underscore');
 
+
 /*
  * You will need to reuse the same paths many times over in the course of this sprint.
  * Consider using the `paths` object below to store frequently used file paths. This way,
@@ -25,19 +26,21 @@ exports.initialize = function(pathsObj) {
 // The following function names are provided to you to suggest how you might
 // modularize your code. Keep it clean!
 
-exports.readListOfUrls = function(siteListString) {
+exports.readListOfUrls = function(callback) {
   //Split on new line characters
-  return siteListString.split('\n');
-  //Return array of sites
+  fs.readFile(exports.paths.list, 'utf8', (err, data) => {
+    var splitArr = data.split('\n');
+    callback(splitArr);
+  });
 };
 
-exports.isUrlInList = function(siteListArray, target) {
-  //Check the index of the target in siteListArray
-    //If it is >= 0
-      //Return true
-    //Else
-      //Return false
-  return siteListArray.indexOf(target) >= 0; 
+exports.isUrlInList = function(target, callback) {
+  //Assign a variable to the result of readListOfUrls
+
+  exports.readListOfUrls( array => {
+    callback(array.indexOf(target) >= 0);
+  });
+
 };
 
 exports.addUrlToList = function() {
