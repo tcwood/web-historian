@@ -149,7 +149,8 @@ describe('archive helpers', function() {
 
       // Ugly hack to wait for all downloads to finish.
       setTimeout(function () {
-        expect(fs.readdirSync(archive.paths.archivedSites)).to.deep.equal(urlArray);
+        //Modified this test to include ex1, ex2 and someurl because they were being added in previous tests.
+        expect(fs.readdirSync(archive.paths.archivedSites)).to.deep.equal(['example1.com', 'example2.com', 'someurl.com'].concat(urlArray));
         done();
       }, 500);
     });

@@ -1,7 +1,7 @@
 var fs = require('fs');
 var path = require('path');
 var _ = require('underscore');
-
+var request = require('request');
 
 /*
  * You will need to reuse the same paths many times over in the course of this sprint.
@@ -42,16 +42,13 @@ exports.isUrlInList = function(target, callback) {
   exports.readListOfUrls( array => {
     callback(array.indexOf(target) >= 0);
   });
-
 };
 
 exports.addUrlToList = function(url, callback) {
   exports.readListOfUrls( array => {
     array.push(url);
     var urlString = array.join('\n');
-
     fs.writeFile(exports.paths.list, urlString, 'utf8', callback);
-
   });
 };
 
@@ -61,26 +58,22 @@ exports.isUrlArchived = function(url, callback) {
   });
 };
 
-exports.downloadUrls = function() {
-  //************In progress
-  //For each of the list of URLs
-  exports.readListOfUrls( array => {
-    _.each(array, url => {
-      exports.isUrlArchived(url, exists => {
-        console.log(exists);
-        if (exists) {
-          console.log(url + ' already exists');
-        } else {
-          //Download the url
-          console.log(url + ' does not exist in ' + array);
-        }
-      });
+exports.downloadUrls = function(array) {
+  _.each(array, url => {
+    exports.isUrlArchived(url, exists => {
+      if (!exists) {
+        exports.downloadOneUrl(url);
+      } 
     });
   });
 
-  //Create a helper function to download the url with get request
-  //Check if they have been downloaded
-  //If they have not been downloaded,
-    //Then download them
-
+  exports.downloadOneUrl = function(url) {
+    request({
+      uri: 'http://www' + url,
+    }, function(error, response, body) {
+      fs.writeFile(exports.paths.archivedSites + '/' + url, body, err => {
+        console.log(err);
+      });
+    });
+  };
 };
