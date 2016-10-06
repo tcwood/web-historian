@@ -27,23 +27,31 @@ exports.initialize = function(pathsObj) {
 // modularize your code. Keep it clean!
 
 exports.readListOfUrls = function(callback) {
-  //Split on new line characters
   fs.readFile(exports.paths.list, 'utf8', (err, data) => {
     var splitArr = data.split('\n');
-    callback(splitArr);
+
+    //This stops the occurance of empty urls.Can possibly remove later if we properly fix it
+    var newSplitArr = _.filter(splitArr, item => item);
+
+    callback(newSplitArr);
   });
 };
 
 exports.isUrlInList = function(target, callback) {
-  //Assign a variable to the result of readListOfUrls
-
   exports.readListOfUrls( array => {
     callback(array.indexOf(target) >= 0);
   });
 
 };
 
-exports.addUrlToList = function() {
+exports.addUrlToList = function(url, callback) {
+  exports.readListOfUrls( array => {
+    array.push(url);
+    var urlString = array.join('\n');
+
+    fs.writeFile(exports.paths.list, urlString, 'utf8', callback);
+
+  });
 };
 
 exports.isUrlArchived = function() {
