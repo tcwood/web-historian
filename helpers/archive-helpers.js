@@ -29,7 +29,6 @@ exports.initialize = function(pathsObj) {
 exports.readListOfUrls = function(callback) {
   fs.readFile(exports.paths.list, 'utf8', (err, data) => {
     if (err) {
-      console.log(err);
     } else {
       var splitArr = data.split('\n');
       //This stops the occurance of empty urls.Can possibly remove later if we properly fix it
@@ -63,8 +62,25 @@ exports.isUrlArchived = function(url, callback) {
 };
 
 exports.downloadUrls = function() {
+  //************In progress
   //For each of the list of URLs
+  exports.readListOfUrls( array => {
+    _.each(array, url => {
+      exports.isUrlArchived(url, exists => {
+        console.log(exists);
+        if (exists) {
+          console.log(url + ' already exists');
+        } else {
+          //Download the url
+          console.log(url + ' does not exist in ' + array);
+        }
+      });
+    });
+  });
+
+  //Create a helper function to download the url with get request
   //Check if they have been downloaded
   //If they have not been downloaded,
     //Then download them
+
 };

@@ -6,15 +6,13 @@ var httpHelpers = require('./http-helpers');
 
 exports.handleRequest = function (req, res) {
   //Get the html of the index.html into a variable
-  console.log(req.url);
-
 
   if (req.method === 'GET' || req.method === 'OPTIONS') {
     //Check if req url == /
     var index;
 
-    archive.isUrlInList('www.google.com', function(exists) { console.log('good:', exists); } ); //FINALLLLYYYY RETURNS TRUE!!! FREEEEEDDDOOOOOOMMMMM
-    archive.isUrlInList('www.gosd', function(exists) { console.log('baaaaad', exists); } );
+    // archive.isUrlInList('www.google.com', function(exists) { console.log('good:', exists); } ); //FINALLLLYYYY RETURNS TRUE!!! FREEEEEDDDOOOOOOMMMMM
+    // archive.isUrlInList('www.gosd', function(exists) { console.log('baaaaad', exists); } );
     
     if (req.url === '/' || req.url === '/index.html') {
       //If it does then set the index to archive.paths.siteAssets + index.html
@@ -32,3 +30,5 @@ exports.handleRequest = function (req, res) {
     
   }
 };
+
+
