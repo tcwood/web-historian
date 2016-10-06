@@ -12,8 +12,8 @@ var _ = require('underscore');
 
 exports.paths = {
   siteAssets: path.join(__dirname, '../web/public'),
-  archivedSites: path.join(__dirname, '../archives/sites'),
-  list: path.join(__dirname, '../archives/sites.txt')
+  archivedSites: path.join(__dirname, '../web/archives/sites'),   //CHANGED TO INCLUDE WEB
+  list: path.join(__dirname, '../web/archives/sites.txt')         //CHANGED TO INCLUDE WEB
 };
 
 // Used for stubbing paths for tests, do not modify
@@ -28,12 +28,14 @@ exports.initialize = function(pathsObj) {
 
 exports.readListOfUrls = function(callback) {
   fs.readFile(exports.paths.list, 'utf8', (err, data) => {
-    var splitArr = data.split('\n');
-
-    //This stops the occurance of empty urls.Can possibly remove later if we properly fix it
-    var newSplitArr = _.filter(splitArr, item => item);
-
-    callback(newSplitArr);
+    if (err) {
+      console.log(err);
+    } else {
+      var splitArr = data.split('\n');
+      //This stops the occurance of empty urls.Can possibly remove later if we properly fix it
+      var newSplitArr = _.filter(splitArr, item => item);
+      callback(newSplitArr);
+    }
   });
 };
 
