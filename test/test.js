@@ -10,7 +10,9 @@ initialize(path.join(__dirname, '/testdata'));
 
 archive.initialize({
   archivedSites: path.join(__dirname, '/testdata/sites'),
-  list: path.join(__dirname, '/testdata/sites.txt')
+  list: path.join(__dirname, '/testdata/sites.txt'),
+  ourArchivedSites: path.join(__dirname, '../web/archives/sites'),
+  ourList: path.join(__dirname, '../web/archives/sites.txt')
 });
 
 var request = supertest.agent(server);
@@ -30,7 +32,8 @@ describe('server', function() {
       it('should return the content of a website from the archive', function (done) {
         var fixtureName = 'www.google.com';
         var fixturePath = archive.paths.archivedSites + '/' + fixtureName;
-
+        
+        archive.addUrlToList(fixtureName);      //OUR NEW ADDITION
         // Create or clear the file.
         var fd = fs.openSync(fixturePath, 'w');
         fs.writeSync(fd, 'google');
@@ -46,6 +49,7 @@ describe('server', function() {
             done(err);
           });
       });
+
 
       it('Should 404 when asked for a nonexistent file', function(done) {
         request.get('/arglebargle').expect(404, done);

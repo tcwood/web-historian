@@ -44,6 +44,7 @@ exports.isUrlInList = function(target, callback) {
   });
 };
 
+
 exports.addUrlToList = function(url, callback) {
   exports.readListOfUrls( array => {
     array.push(url);
