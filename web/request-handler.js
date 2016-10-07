@@ -53,8 +53,6 @@ exports.handleRequest = function (req, res) {
       archive.isUrlArchived(url, function(exists) {
         //If file exists in archives
         if (exists) {
-          console.log('url', url);
-
           httpHelpers.serveAssets(res, archive.paths.archivedSites + '/' + url, function(data) {
             res.writeHead(302, httpHelpers.headers);
             res.end(data);
@@ -64,7 +62,6 @@ exports.handleRequest = function (req, res) {
           // res.end();
         } else {
           //If the file does not exist in the archives
-          fetcher.fetch();
           fs.appendFile(archive.paths.list, url + '\n', function (err) {
             if (!err) {
               httpHelpers.serveAssets(res, archive.paths.siteAssets + '/loading.html', function(data) {

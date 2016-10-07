@@ -1,5 +1,6 @@
 google.com
 yahoo.com
 amazon.com
-amazon.com
-amazon.com
+twitter.com
+facebook.com
+bing.com
