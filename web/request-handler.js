@@ -2,6 +2,7 @@ var path = require('path');
 var archive = require('../helpers/archive-helpers');
 var fs = require('fs');
 var httpHelpers = require('./http-helpers');
+var fetcher = require('../workers/htmlfetcher');
 
 
 exports.handleRequest = function (req, res) {
@@ -42,22 +43,34 @@ exports.handleRequest = function (req, res) {
       var url = urlBuffer.slice(4);
 
       if (url === '') {
+      //In the case that we have not been provided a url, redirect them to index.html
         httpHelpers.serveAssets(res, archive.paths.siteAssets + '/index.html', function(data) {
           res.writeHead(200, httpHelpers.headers);
           res.end(data);
         });
-      }
+      } 
 
       archive.isUrlArchived(url, function(exists) {
+        //If file exists in archives
         if (exists) {
-          res.writeHead(302, {Location: 'http://127.0.0.1:8080/' + url});
-          res.end();
+          console.log('url', url);
+
+          httpHelpers.serveAssets(res, archive.paths.archivedSites + '/' + url, function(data) {
+            res.writeHead(302, httpHelpers.headers);
+            res.end(data);
+          });
+
+          // res.writeHead(302, {Location: 'http://127.0.0.1:8080/' + url});
+          // res.end();
         } else {
+          //If the file does not exist in the archives
+          fetcher.fetch();
           fs.appendFile(archive.paths.list, url + '\n', function (err) {
             if (!err) {
-              console.log('POSTPOTSPPOST', url);
-              res.writeHead(201, {Location: 'http://127.0.0.1:8080/loading.html'});
-              res.end();
+              httpHelpers.serveAssets(res, archive.paths.siteAssets + '/loading.html', function(data) {
+                res.writeHead(404, httpHelpers.headers);
+                res.end(data);
+              });
             }
           });
         }
